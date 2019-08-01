@@ -16,19 +16,34 @@
       <input type="submit" name="submit" >
     </form>
 
-    <% result = connection.exec("select date, weight, give_for from crops where not give_for ='自家消費' and quality= 'f';") %>
+    <% result = connection.exec("select date, weight, give_for from crops where not give_for ='自家消費' ;") %>
+    <% results = connection.exec("select date, weight, give_for from crops where  quality= 'f';") %>
     <% date = [] %>
+    <% dates = [] %>
 
     <% result.each do |record| %>
       <%  date << "Size of bitter gourd: #{record ["weight"]} Sold to: #{record ["give_for"]}" %>
+      
+    <% end %>
+    <% results.each do |record| %>
+      
+      <%  dates << "Size of bitter gourd: #{record ["weight"]} Sold to: #{record ["give_for"]}" %>
     <% end %>
 
     <form action="goya.cgi" method="POST">
-       Press the button below to jump to the size of the bitter gourd and the information page of the buyer<br><br>
+       Press the button below to see information page with 自家消費 <br><br>
        <!-- Substitute the data you want to send for value -->
        <!-- Make name = "goya" a mark of information -->
       <input type="text" name="goya" value="<%= date.join(' ') %>">
       <input type="submit" name="submit" >
+      <br/>
+      <br/>
+      <form action="goyas.cgi" method="POST">
+      Press the button below to see information page with poor quality (false)<br><br>
+      <!-- Substitute the data you want to send for value -->
+      <!-- Make name = "goya" a mark of information -->
+     <input type="text" name="goya" value="<%= dates.join(' ') %>">
+     <input type="submit" name="submit" >
     </form>
   </body>
 </html>
